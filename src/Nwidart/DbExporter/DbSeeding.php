@@ -73,13 +73,13 @@ class DbSeeding extends DbExporter
 
         // Get the tables for the database
         $tables = $this->getTables();
-dd(self::getDB()->getConfig('prefix'));
+
         $stub = "";
         // Loop over the tables
         foreach ($tables as $key => $value) {
             $tableName = $value['table_name'];
             if ($prefix = self::getDB()->getConfig('prefix')) {
-                $table_name = str_replace($prefix, '', $tableName);
+                $table_name = $prefix . str_replace($prefix, '', $tableName);
             }
 
             // Do not export the ignored tables
