@@ -46,6 +46,19 @@ class DbSeeding extends DbExporter
         file_put_contents(Config::get('db-exporter::export_path.seeds')."{$filename}.php", $seed);
     }
 
+    protected function isIgnoredTable($table_name)
+    {
+        if (in_array($table_name, self::$ignore)) {
+            return true;
+        }
+        foreach (self::$ignore as $ignore) {
+            if ('/' === $ignore[0] && preg_match($ignore, $table_name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Convert the database tables to something usefull
      * @param null $database
@@ -65,9 +78,8 @@ class DbSeeding extends DbExporter
         // Loop over the tables
         foreach ($tables as $key => $value) {
             // Do not export the ignored tables
-            if (in_array($value['table_name'], self::$ignore)) {
-                continue;
-            }
+            if ($this->isIgnoredTable($value['table_name'])) continue;
+
             $tableName = $value['table_name'];
             $tableData = $this->getTableData($value['table_name']);
             $insertStub = "";

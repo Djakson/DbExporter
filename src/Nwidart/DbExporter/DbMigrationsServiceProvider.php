@@ -19,7 +19,7 @@ class DbMigrationsServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->package('nwidart/db-exporter');
+
     }
 
     /**
