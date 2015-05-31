@@ -30,7 +30,8 @@ class SeedGeneratorCommand extends GeneratorCommand
 
         // Grab the options
         $ignore = $this->option('ignore');
-
+        $connection = $this->option('connection');
+        $this->handler->setConnection($connection);
         if (empty($ignore)) {
             $this->handler->seed();
         } else {
@@ -60,7 +61,8 @@ class SeedGeneratorCommand extends GeneratorCommand
     protected function getOptions()
     {
         return array(
-            array('ignore', 'ign', InputOption::VALUE_REQUIRED, 'Ignore tables to export, separated by a comma', null)
+            array('ignore', 'ign', InputOption::VALUE_REQUIRED, 'Ignore tables to export, separated by a comma', null),
+            array('connection', 'c', InputOption::VALUE_OPTIONAL, 'Connection name', null)
         );
     }
 }

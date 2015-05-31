@@ -10,6 +10,14 @@ abstract class DbExporter
      */
     public static $ignore = array('migrations');
     public static $remote;
+    public static $connection;
+
+    protected static function getDB()
+    {
+        if (self::$connection)
+            return DB::connection(self::$connection);
+        return DB::connection();
+    }
 
     /**
      * Get all the tables
@@ -17,13 +25,13 @@ abstract class DbExporter
      */
     protected function getTables()
     {
-        $pdo = DB::connection()->getPdo();
+        $pdo = self::getDB()->getPdo();
         return $pdo->query('SELECT table_name FROM information_schema.tables WHERE table_schema="' . $this->database . '"');
     }
 
     public function getTableIndexes($table)
     {
-        $pdo = DB::connection()->getPdo();
+        $pdo = self::getDB()->getPdo();
         return $pdo->query('SHOW INDEX FROM ' . $table . ' WHERE Key_name != "PRIMARY"');
     }
 
@@ -34,7 +42,7 @@ abstract class DbExporter
      */
     protected function getTableDescribes($table)
     {
-        return DB::table('information_schema.columns')
+        return self::getDB()->table('information_schema.columns')
             ->where('table_schema', '=', $this->database)
             ->where('table_name', '=', $table)
             ->get($this->selects);
@@ -47,7 +55,7 @@ abstract class DbExporter
      */
     protected function getTableData($table)
     {
-        return DB::table($table)->get();
+        return self::getDB()->table($table)->get();
     }
 
     /**

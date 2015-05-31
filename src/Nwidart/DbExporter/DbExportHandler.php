@@ -74,6 +74,13 @@ class DbExportHandler
         return $this;
     }
 
+    public function setConnection($connection_name)
+    {
+        DbExporter::$connection = $connection_name;
+
+        return $this;
+    }
+
     /**
      * @return mixed
      */
