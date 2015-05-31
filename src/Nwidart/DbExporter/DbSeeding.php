@@ -85,7 +85,7 @@ class DbSeeding extends DbExporter
             // Do not export the ignored tables
             if ($this->isIgnoredTable($tableName)) continue;
 
-            $tableData = $this->getTableData($table_name);
+            $tableData = $this->getTableData($tableName);
             $insertStub = "";
 
             foreach ($tableData as $obj) {
